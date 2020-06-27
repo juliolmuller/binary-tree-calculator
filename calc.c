@@ -12,11 +12,6 @@ typedef struct _node {
 } NODE;
 typedef NODE *POINTER;
 
-POINTER tree_init()
-{
-  return NULL;
-}
-
 POINTER tree_create_node(TREE_TYPE value)
 {
   POINTER node = (POINTER) malloc(sizeof(NODE));
@@ -127,7 +122,7 @@ POINTER tree_remove_node(POINTER root, TREE_TYPE value)
 
 int main()
 {
-  POINTER tree = tree_init();
+  POINTER tree = NULL;
 
   while (true) {
     int option = 0;
