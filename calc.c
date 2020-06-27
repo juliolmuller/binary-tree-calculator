@@ -1,27 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-#define true 1
-#define false 0
+typedef struct _treeNode {
+  char value;
+  struct _treeNode *left, *right;
+} TREE_NODE;
 
-typedef int boolean;
-typedef int TREE_TYPE; /* tipo do elemento a ser colocado na estrutura */
-typedef struct _node {
-  TREE_TYPE value;
-  struct _node *left, *right;
-} NODE;
-typedef NODE *POINTER;
-
-POINTER tree_create_node(TREE_TYPE value)
+TREE_NODE *tree_create_node(char value)
 {
-  POINTER node = (POINTER) malloc(sizeof(NODE));
+  TREE_NODE *node = (TREE_NODE *) malloc(sizeof(TREE_NODE));
   node->value = value;
   node->right = NULL;
   node->left = NULL;
   return node;
 }
 
-void tree_print(POINTER root)
+void tree_print(TREE_NODE *root)
 {
   if (root != NULL) {
     printf("%i", root->value);
@@ -32,7 +27,7 @@ void tree_print(POINTER root)
   }
 }
 
-POINTER tree_search_node(POINTER root, TREE_TYPE value)
+TREE_NODE *tree_search_node(TREE_NODE *root, char value)
 {
   if (root == NULL) {
     return NULL;
@@ -46,7 +41,7 @@ POINTER tree_search_node(POINTER root, TREE_TYPE value)
   return root;
 }
 
-int tree_count_nodes(POINTER root)
+int tree_count_nodes(TREE_NODE *root)
 {
   if (root == NULL) {
     return 0;
@@ -54,7 +49,7 @@ int tree_count_nodes(POINTER root)
   return 1 + tree_count_nodes(root->left) + tree_count_nodes(root->right);
 }
 
-POINTER tree_add_node(POINTER root, POINTER node)
+TREE_NODE *tree_add_node(TREE_NODE *root, TREE_NODE *node)
 {
   if (root == NULL) {
     return node;
@@ -67,9 +62,9 @@ POINTER tree_add_node(POINTER root, POINTER node)
   return root;
 }
 
-POINTER tree_search_node2(POINTER root, TREE_TYPE value, POINTER *parent)
+TREE_NODE *tree_search_node2(TREE_NODE *root, char value, TREE_NODE **parent)
 {
-  POINTER current = root;
+  TREE_NODE *current = root;
   *parent = NULL;
   while (current) {
     if (value == current->value) {
@@ -85,9 +80,9 @@ POINTER tree_search_node2(POINTER root, TREE_TYPE value, POINTER *parent)
   return NULL;
 }
 
-POINTER tree_remove_node(POINTER root, TREE_TYPE value)
+TREE_NODE *tree_remove_node(TREE_NODE *root, char value)
 {
-  POINTER parent, node, next, aux;
+  TREE_NODE *parent, *node, *next, *aux;
   node = tree_search_node2(root, value, &parent);
   if (node == NULL) {
     return root;
@@ -122,9 +117,9 @@ POINTER tree_remove_node(POINTER root, TREE_TYPE value)
 
 int main()
 {
-  POINTER tree = NULL;
+  TREE_NODE *tree = NULL;
 
-  while (true) {
+  while (1) {
     int option = 0;
     printf("\n");
     printf("O que deseja fazer com a ARVORE?\n" );
@@ -146,9 +141,9 @@ int main()
           break;
 
         case 2:
-          while (true) {
-            TREE_TYPE value;
-            POINTER node = NULL;
+          while (1) {
+            char value;
+            TREE_NODE *node = NULL;
             printf("\tBuscar elemento: ");
             scanf("%d", &value);
             if (value == 0) break;
@@ -166,19 +161,19 @@ int main()
           break;
 
         case 4:
-          while (true) {
-            TREE_TYPE value;
+          while (1) {
+            char value;
             printf("\tNovo elemento: ");
             scanf("%d", &value);
             if (value == 0) break;
-            POINTER node = tree_create_node(value);
+            TREE_NODE *node = tree_create_node(value);
             tree = tree_add_node(tree, node);
           }
           break;
 
         case 5:
-          while (true) {
-            TREE_TYPE value;
+          while (1) {
+            char value;
             printf( "\tElemento a ser removido: " );
             scanf("%d", &value);
             if (value == 0) break;
