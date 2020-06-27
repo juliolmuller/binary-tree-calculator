@@ -5,7 +5,7 @@
 #define MAX_STR 100
 
 typedef struct _listNode {
-  char exp[MAX_STR];
+  char string[MAX_STR];
   struct _listNode *next;
 } LIST_NODE;
 
@@ -46,7 +46,7 @@ LIST_NODE *list_create_node(char word[])
   }
 
   LIST_NODE *newNode = (LIST_NODE *) malloc(sizeof(LIST_NODE));
-  strcpy(newNode->exp, word);
+  strcpy(newNode->string, word);
   newNode->next = NULL;
 
   return newNode;
@@ -75,7 +75,7 @@ void list_print(LIST_NODE *list)
   }
   printf("Itens da lista:\n");
   while (list != NULL) {
-    printf("    %s\n", list->exp);
+    printf("    %s\n", list->string);
     list = list->next;
   }
   printf("\n");
