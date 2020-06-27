@@ -2,6 +2,16 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define MAX_STR 100
+
+typedef struct _listNode {
+  char exp[MAX_STR];
+  struct _listNode *next;
+} LIST_NODE;
+
+void list_push(LIST_NODE **, char []);
+void list_print(LIST_NODE *);
+
 typedef struct _treeNode {
   char value;
   struct _treeNode *left, *right;
@@ -117,6 +127,21 @@ TREE_NODE *tree_remove_node(TREE_NODE *root, char value)
 
 int main()
 {
+  LIST_NODE *list = NULL;
+
+  int i;
+  for (i = 0; i < 3; i++) {
+    char word[MAX_STR] = "\0";
+    gets(word);
+    list_push(&list, word);
+  }
+
+  list_print(list);
+  return 0;
+}
+
+int main2()
+{
   TREE_NODE *tree = NULL;
 
   while (1) {
@@ -189,4 +214,46 @@ int main()
       }
     }
   }
+}
+
+LIST_NODE *list_create_node(char word[])
+{
+  if (word == NULL) {
+    return NULL;
+  }
+
+  LIST_NODE *newNode = (LIST_NODE *) malloc(sizeof(LIST_NODE));
+  strcpy(newNode->exp, word);
+  newNode->next = NULL;
+
+  return newNode;
+}
+
+void list_push(LIST_NODE **list, char word[])
+{
+  LIST_NODE *newNode = list_create_node(word);
+  LIST_NODE *currentNode = *list;
+
+  if (*list == NULL) {
+    *list = newNode;
+    return;
+  }
+
+  while (currentNode->next != NULL) {
+    currentNode = currentNode->next;
+  }
+  currentNode->next = newNode;
+}
+
+void list_print(LIST_NODE *list)
+{
+  if (list == NULL) {
+    printf("A lista esta vazia\n\n");
+  }
+  printf("Itens da lista:\n");
+  while (list != NULL) {
+    printf("    %s\n", list->exp);
+    list = list->next;
+  }
+  printf("\n");
 }
