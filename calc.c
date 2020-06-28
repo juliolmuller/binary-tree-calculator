@@ -5,11 +5,12 @@
 #include "strlist.h"
 #include "bintree.h"
 
+LIST_NODE *infixExpressions = NULL;
+LIST_NODE *postfixExpressions = NULL;
+
 int main()
 {
-  LIST_NODE *infixExpressions = NULL;
-  LIST_NODE *postfixExpressions = NULL;
-  while (1) {
+  while (true) {
     char infix[MAX_STR], postfix[MAX_STR];
     printf("Digite a expressao aritmetica ('0' para encerrar): ");
     gets(infix);
