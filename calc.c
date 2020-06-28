@@ -7,7 +7,7 @@
 typedef int boolean;
 
 boolean is_numeric(char);
-int infix_to_postfix(char *);
+int infix_to_postfix(char *, char *);
 
 #define MAX_STR 100
 typedef struct _listNode {
@@ -30,19 +30,22 @@ void tree_print(TREE_NODE *);
 
 int main()
 {
-  LIST_NODE *expressions = NULL;
+  LIST_NODE *infixExpressions = NULL;
+  LIST_NODE *postfixExpressions = NULL;
   while (1) {
-    char exp[MAX_STR] = "\0";
+    char infix[MAX_STR], postfix[MAX_STR];
     printf("Digite a expressao aritmetica ('0' para encerrar): ");
-    gets(exp);
-    if (strcmp(exp, "0") == 0) {
+    gets(infix);
+    if (strcmp(infix, "0") == 0) {
       break;
     }
-    infix_to_postfix(exp);
-    list_push(&expressions, exp);
+    infix_to_postfix(infix, postfix);
+    list_push(&infixExpressions, infix);
+    list_push(&postfixExpressions, postfix);
   }
 
-  list_print(expressions);
+  list_print(infixExpressions);
+  list_print(postfixExpressions);
   return 0;
 }
 
@@ -107,21 +110,21 @@ int stack_precedence(char ch)
   }
 }
 
-int infix_to_postfix(char *infix)
+int infix_to_postfix(char *infix, char *postfix)
 {
   STACK *stack = stack_create(strlen(infix));
   int i, j;
   for (i = 0, j = 0; infix[i]; i++) {
     if (is_numeric(infix[i])) {
       do {
-        infix[j++] = infix[i++];
+        postfix[j++] = infix[i++];
       } while (is_numeric(infix[i]));
       i--;
     } else if (infix[i] == '(') {
       stack_push(stack, infix[i]);
     } else if (infix[i] == ')') {
       while (!stack_is_empty(stack) && stack_get(stack) != '(') {
-        infix[j++] = stack_pop(stack);
+        postfix[j++] = stack_pop(stack);
       }
       if (!stack_is_empty(stack) && stack_get(stack) != '(')  {
         return -1;
@@ -130,15 +133,15 @@ int infix_to_postfix(char *infix)
       }
     } else {
       while (!stack_is_empty(stack) && stack_precedence(infix[i]) <= stack_precedence(stack_get(stack)))  {
-        infix[j++] = stack_pop(stack);
+        postfix[j++] = stack_pop(stack);
       }
       stack_push(stack, infix[i]);
     }
   }
   while (!stack_is_empty(stack)) {
-    infix[j++] = stack_pop(stack);
+    postfix[j++] = stack_pop(stack);
   }
-  infix[j] = '\0';
+  postfix[j] = '\0';
 }
 
 LIST_NODE *list_create_node(char word[])
