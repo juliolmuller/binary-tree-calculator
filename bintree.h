@@ -2,16 +2,16 @@
 #include <stdlib.h>
 
 typedef struct _treeNode {
-  char value;
+  int value;
   struct _treeNode *left, *right;
 } TREE_NODE;
 
 TREE_NODE *tree_add_node(TREE_NODE *, TREE_NODE *);
-TREE_NODE *tree_search_node(TREE_NODE *, char);
+TREE_NODE *tree_search_node(TREE_NODE *, int);
 int tree_count_nodes(TREE_NODE *);
 void tree_print(TREE_NODE *);
 
-TREE_NODE *tree_create_node(char value)
+TREE_NODE *tree_create_node(int value)
 {
   TREE_NODE *node = (TREE_NODE *) malloc(sizeof(TREE_NODE));
   node->value = value;
@@ -33,7 +33,7 @@ TREE_NODE *tree_add_node(TREE_NODE *root, TREE_NODE *node)
   return root;
 }
 
-TREE_NODE *tree_search_node(TREE_NODE *root, char value)
+TREE_NODE *tree_search_node(TREE_NODE *root, int value)
 {
   if (root == NULL) {
     return NULL;
