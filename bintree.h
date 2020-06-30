@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include "boolean.h"
 
 typedef struct _treeNode {
@@ -10,6 +11,7 @@ typedef struct _treeNode {
 
 TREE_NODE *tree_insert(TREE_NODE *, int, boolean);
 void tree_print(TREE_NODE *);
+double tree_calculate(TREE_NODE *);
 
 TREE_NODE *tree_create_node(int value, boolean isNumber)
 {
@@ -55,5 +57,30 @@ void tree_print(TREE_NODE *root)
     tree_print(root->left);
     tree_print(root->right);
     printf(") ");
+  }
+}
+
+double tree_calculate(TREE_NODE *root)
+{
+  if (root->isNumber) {
+    return root->value;
+  }
+  double op1 = tree_calculate(root->left);
+  double op2 = tree_calculate(root->right);
+  switch (root->value) {
+    case '+':
+      return op1 + op2;
+
+    case '-':
+      return op1 - op2;
+
+    case '*':
+      return op1 * op2;
+
+    case '/':
+      return op1 / op2;
+
+    case '^':
+      return pow(op1, op2);
   }
 }
