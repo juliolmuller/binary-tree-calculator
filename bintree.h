@@ -1,64 +1,56 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "boolean.h"
 
 typedef struct _treeNode {
   int value;
+  boolean isNumber;
   struct _treeNode *left, *right;
 } TREE_NODE;
 
-TREE_NODE *tree_insert(TREE_NODE *, int);
-TREE_NODE *tree_search_node(TREE_NODE *, int);
-int tree_count_nodes(TREE_NODE *);
+TREE_NODE *tree_insert(TREE_NODE *, int, boolean);
 void tree_print(TREE_NODE *);
 
-TREE_NODE *tree_create_node(int value)
+TREE_NODE *tree_create_node(int value, boolean isNumber)
 {
   TREE_NODE *node = (TREE_NODE *) malloc(sizeof(TREE_NODE));
+  node->isNumber = isNumber;
   node->value = value;
   node->right = NULL;
   node->left = NULL;
   return node;
 }
 
-TREE_NODE *tree_insert(TREE_NODE *root, int newValue)
+TREE_NODE *tree_insert(TREE_NODE *root, int newValue, boolean isNumber)
 {
   if (root == NULL) {
-    return tree_create_node(newValue);
+    return tree_create_node(newValue, isNumber);
   }
-  if (newValue < root->value) {
-    root->left = tree_insert(root->left, newValue);
-  } else if (newValue > root->value) {
-    root->right = tree_insert(root->right, newValue);
+  if (root->left == NULL || !root->left->isNumber) {
+    TREE_NODE *attempt = tree_insert(root->left, newValue, isNumber);
+    if (attempt != NULL) {
+      root->left = attempt;
+      return root;
+    }
   }
-  return root;
-}
-
-TREE_NODE *tree_search_node(TREE_NODE *root, int value)
-{
-  if (root == NULL) {
-    return NULL;
+  if (root->right == NULL || !root->right->isNumber) {
+    TREE_NODE *attempt = tree_insert(root->right, newValue, isNumber);
+    if (attempt != NULL) {
+      root->right = attempt;
+      return root;
+    }
   }
-  if (value < root->value) {
-    return tree_search_node(root->left, value);
-  }
-  if (value > root->value) {
-    return tree_search_node(root->right, value);
-  }
-  return root;
-}
-
-int tree_count_nodes(TREE_NODE *root)
-{
-  if (root == NULL) {
-    return 0;
-  }
-  return 1 + tree_count_nodes(root->left) + tree_count_nodes(root->right);
+  return NULL;
 }
 
 void tree_print(TREE_NODE *root)
 {
   if (root != NULL) {
-    printf("%i", root->value);
+    if (root->isNumber) {
+      printf("%i", root->value);
+    } else {
+      printf("%c", root->value);
+    }
     printf(" (");
     tree_print(root->left);
     tree_print(root->right);
