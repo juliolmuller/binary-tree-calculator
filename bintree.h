@@ -6,7 +6,7 @@ typedef struct _treeNode {
   struct _treeNode *left, *right;
 } TREE_NODE;
 
-TREE_NODE *tree_add_node(TREE_NODE *, TREE_NODE *);
+TREE_NODE *tree_insert(TREE_NODE *, int);
 TREE_NODE *tree_search_node(TREE_NODE *, int);
 int tree_count_nodes(TREE_NODE *);
 void tree_print(TREE_NODE *);
@@ -20,15 +20,15 @@ TREE_NODE *tree_create_node(int value)
   return node;
 }
 
-TREE_NODE *tree_add_node(TREE_NODE *root, TREE_NODE *node)
+TREE_NODE *tree_insert(TREE_NODE *root, int newValue)
 {
   if (root == NULL) {
-    return node;
+    return tree_create_node(newValue);
   }
-  if (node->value < root->value) {
-    root->left = tree_add_node(root->left, node);
-  } else if (node->value > root->value) {
-    root->right = tree_add_node(root->right, node);
+  if (newValue < root->value) {
+    root->left = tree_insert(root->left, newValue);
+  } else if (newValue > root->value) {
+    root->right = tree_insert(root->right, newValue);
   }
   return root;
 }
