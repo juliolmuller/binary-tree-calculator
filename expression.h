@@ -1,7 +1,12 @@
+#include <string.h>
 #include "boolean.h"
+#include "strlist.h"
 #include "utils.h"
 
 int infix_to_postfix(char *, char *);
+int infix_to_prefix(char *, char *);
+int prefix_to_postfix(char *, char *);
+int postfix_to_prefix(char *, char *);
 
 typedef struct _stack {
   int *array;
@@ -96,6 +101,38 @@ int infix_to_postfix(char *infix, char *postfix)
     postfix[j++] = stack_pop(stack);
     postfix[j++] = ' ';
   }
-  postfix[j] = '\0';
+  postfix[--j] = '\0';
+  return 0;
+}
+
+int infix_to_prefix(char *infix, char *prefix)
+{
+  char aux[MAX_STR];
+  strcpy(aux, infix);
+  strrev(aux);
+  int i, len = strlen(aux);
+  for (i = 0; i < len; i++) {
+    if (aux[i] == '(') {
+      aux[i] = ')';
+    } else if (aux[i] == ')') {
+      aux[i] = '(';
+    }
+  }
+  int result = infix_to_postfix(aux, prefix);
+  strrev(prefix);
+  return result;
+}
+
+int prefix_to_postfix(char *prefix, char *postfix)
+{
+  strcpy(postfix, prefix);
+  strrev(postfix);
+  return 0;
+}
+
+int postfix_to_prefix(char *postfix, char *prefix)
+{
+  strcpy(prefix, postfix);
+  strrev(prefix);
   return 0;
 }
