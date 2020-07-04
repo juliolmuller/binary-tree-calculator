@@ -14,7 +14,7 @@ int main()
   int i, counter = 0;
   while (true) {
     char infix[MAX_STR], prefix[MAX_STR], postfix[MAX_STR];
-    printf("Digite a expressao aritmetica ('0' para encerrar): ");
+    printf("Type an arithmetic expression ('0' to stop): ");
     gets(infix);
     if (strcmp(infix, "0") == 0) {
       break;
@@ -27,12 +27,12 @@ int main()
 
   for (i = 0; i < counter; i++) {
     printf("\nExpression #%i\n", i + 1);
-    printf("    Infixa:    %s\n", infixExpressions->string);
-    printf("    Posfixa:   %s\n", postfixExpressions->string);
-    printf("    Arvore:    ");
+    printf("    Infix:   %s\n", infixExpressions->string);
+    printf("    Postfix: %s\n", postfixExpressions->string);
+    printf("    Tree:    ");
     TREE_NODE *tree = build_tree(postfixExpressions->string);
     tree_print(tree);
-    printf("\n    Resultado: %.2f\n", tree_calculate(tree));
+    printf("\n    Result:  %.2f\n", tree_calculate(tree));
 
     infixExpressions = infixExpressions->next;
     postfixExpressions = postfixExpressions->next;
