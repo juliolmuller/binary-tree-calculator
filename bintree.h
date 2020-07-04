@@ -28,17 +28,17 @@ TREE_NODE *tree_insert(TREE_NODE *root, int newValue, boolean isNumber)
   if (root == NULL) {
     return tree_create_node(newValue, isNumber);
   }
-  if (root->left == NULL || !root->left->isNumber) {
-    TREE_NODE *attempt = tree_insert(root->left, newValue, isNumber);
-    if (attempt != NULL) {
-      root->left = attempt;
-      return root;
-    }
-  }
   if (root->right == NULL || !root->right->isNumber) {
     TREE_NODE *attempt = tree_insert(root->right, newValue, isNumber);
     if (attempt != NULL) {
       root->right = attempt;
+      return root;
+    }
+  }
+  if (root->value != '-' && root->value != '$' && (root->left == NULL || !root->left->isNumber)) {
+    TREE_NODE *attempt = tree_insert(root->left, newValue, isNumber);
+    if (attempt != NULL) {
+      root->left = attempt;
       return root;
     }
   }
@@ -65,22 +65,25 @@ double tree_calculate(TREE_NODE *root)
   if (root->isNumber) {
     return root->value;
   }
-  double op1 = tree_calculate(root->left);
-  double op2 = tree_calculate(root->right);
+  double rightOp = tree_calculate(root->right);
+  if (root->value == '-') {
+    return rightOp * -1;
+  }
+  if (root->value == '$') {
+    return sqrt(rightOp);
+  }
+  double leftOp = tree_calculate(root->left);
   switch (root->value) {
     case '+':
-      return op1 + op2;
-
-    case '-':
-      return op1 - op2;
+      return leftOp + rightOp;
 
     case '*':
-      return op1 * op2;
+      return leftOp * rightOp;
 
     case '/':
-      return op1 / op2;
+      return leftOp / rightOp;
 
     case '^':
-      return pow(op1, op2);
+      return pow(leftOp, rightOp);
   }
 }
