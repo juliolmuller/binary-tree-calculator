@@ -5,7 +5,7 @@
 #include "bintree.h"
 
 LIST_NODE *infixExpressions = NULL;
-LIST_NODE *prefixExpressions = NULL;
+LIST_NODE *postfixExpressions = NULL;
 
 TREE_NODE *build_tree(char *);
 
@@ -20,22 +20,22 @@ int main()
       break;
     }
     counter++;
-    infix_to_prefix(infix, prefix);
+    infix_to_postfix(infix, prefix);
     list_push(&infixExpressions, infix);
-    list_push(&prefixExpressions, prefix);
+    list_push(&postfixExpressions, prefix);
   }
 
   for (i = 0; i < counter; i++) {
     printf("\nExpression #%i\n", i + 1);
-    printf("    Infix:  %s\n", infixExpressions->string);
-    printf("    Prefix: %s\n", prefixExpressions->string);
-    printf("    Tree:   ");
-    TREE_NODE *tree = build_tree(prefixExpressions->string);
+    printf("    Infixa:    %s\n", infixExpressions->string);
+    printf("    Posfixa:   %s\n", postfixExpressions->string);
+    printf("    Arvore:    ");
+    TREE_NODE *tree = build_tree(postfixExpressions->string);
     tree_print(tree);
-    printf("\n    Result: %.2f\n", tree_calculate(tree));
+    printf("\n    Resultado: %.2f\n", tree_calculate(tree));
 
     infixExpressions = infixExpressions->next;
-    prefixExpressions = prefixExpressions->next;
+    postfixExpressions = postfixExpressions->next;
   }
   printf("\n");
 
@@ -46,7 +46,7 @@ TREE_NODE *build_tree(char *exp)
 {
   TREE_NODE *tree = NULL;
   int i, len = strlen(exp);
-  for (i = 0; i < len; i++) {
+  for (i = len - 1; i>= 0; i--) {
     if (exp[i] == ' ') {
       continue;
     }
@@ -54,10 +54,10 @@ TREE_NODE *build_tree(char *exp)
       char number[MAX_STR];
       int index = 0;
       do {
-        number[index++] = exp[i++];
-      } while (is_numeric(exp[i]));
+        number[index++] = exp[i--];
+      } while (i >= 0 && is_numeric(exp[i]));
       number[index] = '\0';
-      tree = tree_insert(tree, atoi(number), true);
+      tree = tree_insert(tree, atoi(strrev(number)), true);
     } else {
       tree = tree_insert(tree, exp[i], false);
     }
