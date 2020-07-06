@@ -95,7 +95,7 @@ int infix_to_postfix(char *infix, char *postfix)
         postfix[j++] = stack_pop(stack);
         postfix[j++] = ' ';
       }
-      if (infix[i] == '-') {
+      if (infix[i] == '-' || infix[i] == '$') {
         if (unaryStart) {
           unaryStart = false;
         } else {
