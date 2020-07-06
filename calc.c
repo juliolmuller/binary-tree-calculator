@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <complex.h>
 #include "expression.h"
 #include "bintree.h"
 
@@ -8,6 +9,7 @@ LIST_NODE *infixExpressions = NULL;
 LIST_NODE *postfixExpressions = NULL;
 
 TREE_NODE *build_tree(char *);
+void print_complex(double complex);
 
 int main()
 {
@@ -32,7 +34,9 @@ int main()
     printf("    Tree:    ");
     TREE_NODE *tree = build_tree(postfixExpressions->string);
     tree_print(tree);
-    printf("\n    Result:  %.2f\n", tree_calculate(tree));
+    printf("\n    Result:  ");
+    print_complex(tree_calculate(tree));
+    printf("\n");
 
     infixExpressions = infixExpressions->next;
     postfixExpressions = postfixExpressions->next;
@@ -63,4 +67,19 @@ TREE_NODE *build_tree(char *exp)
     }
   }
   return tree;
+}
+
+void print_complex(double complex num)
+{
+  double real = creal(num);
+  double imag = cimag(num);
+  if (real) {
+    printf("%.2f", real);
+  }
+  if (real && imag) {
+    printf(" + ");
+  }
+  if (imag) {
+    printf("%.2fi", imag);
+  }
 }
